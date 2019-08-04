@@ -38,15 +38,15 @@
 		<div id="user-nav" class="navbar navbar-inverse">
             <ul class="nav btn-group">
                 <li class="btn btn-inverse">
-                    <a href="#">
+                    <a href="SysuserGradeServlet">
                         <i class="icon icon-user"></i>
                         <span class="text">
-                            张三
+                           	${ sessionScope.sysuser.username }
                         </span>
                     </a>
                 </li>
                 <li class="btn btn-inverse">
-                    <a href="login.html">
+                    <a href="LogoutServlet">
                         <i class="icon icon-share-alt"></i>
                         <span class="text">注销</span>
                     </a>
