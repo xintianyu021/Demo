@@ -10,4 +10,6 @@ public interface GoodsTypeDao {
 	int delete(String goodtype) throws Exception;
 	List<GoodsType> getAll(int pageSize,int pageNum) throws Exception;
 	GoodsType getById(String goodtype) throws Exception;
+	int count() throws Exception;
+	List<GoodsType> getList() throws Exception;
 }

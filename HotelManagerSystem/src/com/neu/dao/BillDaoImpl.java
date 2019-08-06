@@ -184,4 +184,16 @@ public class BillDaoImpl implements BillDao {
 		return n;
 	}
 
+	@Override
+	public double getSum(String orderid) throws Exception {
+		String sql = "select sum(total) from bill where orderid = ? group by orderid";
+		Connection connection = u.getConnection();
+		ResultSet rs = u.executeQuery(sql, connection, orderid);
+		double sum = 0;
+		if(rs.next()) {
+			sum = rs.getDouble(1);
+		}
+		return sum;
+	}
+
 }

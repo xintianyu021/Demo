@@ -38,6 +38,8 @@ public class OrderNumberDaoImpl implements OrderNumberDao {
 			orderNum = new OrderNumber(date, num);
 		}
 		
+		u.closeConnection(c);
+		
 		return orderNum;
 	}
 

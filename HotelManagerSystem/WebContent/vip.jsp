@@ -123,7 +123,7 @@
                 </a>
 				<a href="#" class="current">VIP会员管理</a>
 			</div>
-			<form action="SearchVipServlet" method="post" name="searchForm">
+			<form action="${ pageContext.request.contextPath }/SearchVipServlet?pageNum=1" method="post" name="searchForm">
 				<input type="hidden" name="pagenum" id="pagenum"/>
 				<div class="container-fluid">
 					<div class="row-fluid">
@@ -258,20 +258,50 @@
 					</div>
 				</div>
 			</div>
-			<div class="fg-toolbar ui-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix">
+			<c:choose>
+				<c:when test="${ !empty list }">
+					<div class="fg-toolbar ui-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix">
 				<div class="dataTables_paginate fg-buttonset ui-buttonset fg-buttonset-multi ui-buttonset-multi paging_full_numbers">
 					
-					<a tabindex="0" href="${ pageContext.request.contextPath }/SearchVipServlet?pageNum=1" class="first ui-corner-tl ui-corner-bl fg-button ui-button ui-state-default">首页</a>
-					<a tabindex="0" href="${ pageContext.request.contextPath }/SearchVipServlet?pageNum=${ pageNum==1?1:pageNum-1 }" class="previous fg-button ui-button ui-state-default">上一页</a>
+					<a tabindex="0" href="${ pageContext.request.contextPath }/SearchVipServlet?pageNum=1&guest=${ sessionScope.searchGuest }" class="first ui-corner-tl ui-corner-bl fg-button ui-button ui-state-default">首页</a>
+					<%-- <a tabindex="0" href="${ pageContext.request.contextPath }/SearchVipServlet?pageNum=${ requestScope.pageNum==1?1:requestScope.pageNum-1 }&guest=${ sessionScope.searchGuest }" class="previous fg-button ui-button ui-state-default">上一页</a> --%>
+					
+					<c:choose>
+			           	<c:when test="${param.pageNum>1}">
+			               	<a href="${ pageContext.request.contextPath }/SearchVipServlet?pageNum=${ param.pageNum-1 }&guest=${ sessionScope.searchGuest }" class="previous fg-button ui-button ui-state-default">上一页</a>
+			           	</c:when>
+		
+		          		<c:otherwise>
+		             		  	上一页
+		           		</c:otherwise>
+		      		 </c:choose>
+
+
 					<c:forEach begin="1" end="${ page }" var="pageNum">
 						<a tabindex="0" href="${ pageContext.request.contextPath }/SearchVipServlet?pageNum=${ pageNum }&guest=${ sessionScope.searchGuest }" class="fg-button ui-button ui-state-default">[${ pageNum }]</a>
 					</c:forEach>
-					
-            		<a tabindex="0" href="${ pageContext.request.contextPath }/SearchVipServlet?pageNum=${ pageNum==page?page:pageNum+1 }" class="previous fg-button ui-button ui-state-default">下一页</a>
-					<a tabindex="0" href="${ pageContext.request.contextPath }/SearchVipServlet?pageNum=${ page }" class="last ui-corner-tr ui-corner-br fg-button ui-button ui-state-default">尾页</a>
+					<c:choose>
+			           	<c:when test="${param.pageNum<requestScope.page}">
+			               	<a href="${ pageContext.request.contextPath }/SearchVipServlet?pageNum=${ param.pageNum+1 }&guest=${ sessionScope.searchGuest }" class="previous fg-button ui-button ui-state-default">下一页</a>
+			           	</c:when>
+		
+		          		<c:otherwise>
+		             		  	下一页
+		           		</c:otherwise>
+		      		 </c:choose>
+            		<%-- <a tabindex="0" href="${ pageContext.request.contextPath }/SearchVipServlet?pageNum=${ requestScope.pageNum==page?page:requestScope.pageNum+1 }&guest=${ sessionScope.searchGuest }" class="previous fg-button ui-button ui-state-default">下一页</a> --%>
+					<a tabindex="0" href="${ pageContext.request.contextPath }/SearchVipServlet?pageNum=${ page }&guest=${ sessionScope.searchGuest }" class="last ui-corner-tr ui-corner-br fg-button ui-button ui-state-default">尾页</a>
 			
 				</div>
 			</div>
+				</c:when>
+				<c:otherwise>
+				</c:otherwise>
+			</c:choose>
+			
+			
+			
+			
 		</div>		
         <div class="row-fluid">&nbsp;</div>
         <div class="row-fluid">

@@ -36,7 +36,7 @@ public class GoodsTypeDaoImpl implements GoodsTypeDao {
 
 	@Override
 	public int delete(String goodtype) throws Exception {
-		String sql = "delete from goodtype where goodtype = ?";
+		String sql = "delete from goodstype where goodtype = ?";
 		int n = db.executeUpdate(sql, goodtype);
 		return n;
 	}
@@ -75,7 +75,41 @@ public class GoodsTypeDaoImpl implements GoodsTypeDao {
 			notes = rs.getString("notes");
 			goodstype = new GoodsType(0, goodtype, typename, notes);
 		}
+		db.closeConnection(connection);
 		return goodstype;
+	}
+
+	@Override
+	public int count() throws Exception {
+		String sql = "select count(*) from goodstype";
+		Connection connection = db.getConnection();
+		ResultSet rs = db.executeQuery(sql, connection);
+		rs.next();
+		int pages = rs.getInt(1);
+		
+		db.closeConnection(connection);
+		return pages;
+	}
+
+	@Override
+	public List<GoodsType> getList() throws Exception {
+		String sql = "select * from goodstype ";
+		Connection connection = db.getConnection();
+		ResultSet rs = db.executeQuery(sql, connection );
+		List<GoodsType> list = new ArrayList<GoodsType>();
+		GoodsType goodstype = null;
+		String goodtype;
+		String typename;
+		String notes;
+		while(rs.next()) {
+			goodtype = rs.getString("goodtype");
+			typename = rs.getString("typename");
+			notes = rs.getString("notes");
+			goodstype = new GoodsType(0, goodtype, typename, notes);
+			list.add(goodstype);
+		}
+		db.closeConnection(connection);
+		return list.size()==0?null:list;
 	}
 
 }

@@ -34,4 +34,28 @@ private static GoodsInfoDao dao = new GoodsInfoDaoImpl();
 		return list;
 	}
 
+	@Override
+	public List<GoodsInfo> getAll(int pageSize, int pageNum) throws Exception {
+		List<GoodsInfo> page = dao.getAll(pageSize, pageNum);
+		return page;
+	}
+
+	@Override
+	public GoodsInfo getByGoodId(String goodid) throws Exception {
+		GoodsInfo goodInfo = dao.getById(goodid);
+		return goodInfo;
+	}
+
+	@Override
+	public int count() throws Exception {
+		int count = dao.count();
+		return count;
+	}
+
+	@Override
+	public int countByType(String goodtype) throws Exception {
+		int countByType = dao.countByType(goodtype);
+		return countByType;
+	}
+
 }

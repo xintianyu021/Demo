@@ -12,5 +12,6 @@ public interface BillDao {
 	public List<Bill> getByOrderidByPage(String orderid , int pageNum , int pageSize ) throws Exception;
 	public int getPageNumAll() throws Exception;  
 	public int getPageNumByOrderid(String orderid ) throws Exception;
+	public double getSum(String orderid) throws Exception;
 	
 }

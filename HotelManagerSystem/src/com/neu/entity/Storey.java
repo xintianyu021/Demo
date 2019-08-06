@@ -9,20 +9,19 @@ public String getStorey() {
 public void setStorey(String storey) {
 	this.storey = storey;
 }
-public String getStorename() {
+public String getStoreyname() {
 	return storeyname;
 }
-public void setStorename(String storename) {
-	this.storeyname = storename;
+public void setStoreyname(String storeyname) {
+	this.storeyname = storeyname;
 }
-public Storey(String storey, String storename) {
+public Storey(String storey, String storeyname) {
 	super();
 	this.storey = storey;
-	this.storeyname = storename;
+	this.storeyname = storeyname;
 }
 public Storey() {
 	super();
-	// TODO Auto-generated constructor stub
 }
 @Override
 public String toString() {

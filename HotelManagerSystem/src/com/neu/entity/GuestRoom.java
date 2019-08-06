@@ -3,12 +3,32 @@ package com.neu.entity;
 public class GuestRoom {
 private Integer id;
 private String roomid;
-private String roomtype;
-private String storey;
+private RoomType roomtype;
+private Storey storey;
 private Double price;
 private Double dis;
 private Double vipdis;
 private Double svipdis;
+private String roomstate;
+
+public GuestRoom() {
+	super();
+	// TODO Auto-generated constructor stub
+}
+public GuestRoom(Integer id, String roomid, RoomType roomtype, Storey storey, Double price, Double dis, Double vipdis,
+		Double svipdis, String roomstate) {
+	super();
+	this.id = id;
+	this.roomid = roomid;
+	this.roomtype = roomtype;
+	this.storey = storey;
+	this.price = price;
+	this.dis = dis;
+	this.vipdis = vipdis;
+	this.svipdis = svipdis;
+	this.roomstate = roomstate;
+	
+}
 public Integer getId() {
 	return id;
 }
@@ -21,16 +41,16 @@ public String getRoomid() {
 public void setRoomid(String roomid) {
 	this.roomid = roomid;
 }
-public String getRoomtype() {
+public RoomType getRoomtype() {
 	return roomtype;
 }
-public void setRoomtype(String roomtype) {
+public void setRoomtype(RoomType roomtype) {
 	this.roomtype = roomtype;
 }
-public String getStorey() {
+public Storey getStorey() {
 	return storey;
 }
-public void setStorey(String storey) {
+public void setStorey(Storey storey) {
 	this.storey = storey;
 }
 public Double getPrice() {
@@ -51,32 +71,24 @@ public Double getVipdis() {
 public void setVipdis(Double vipdis) {
 	this.vipdis = vipdis;
 }
-public Double getSvipids() {
+public Double getSvipdis() {
 	return svipdis;
 }
-public void setSvipids(Double svipids) {
+public void setSvipdis(Double svipdis) {
 	this.svipdis = svipdis;
 }
-public GuestRoom(Integer id, String roomid, String roomtype, String storey, Double price, Double dis, Double vipdis,
-		Double svipids) {
-	super();
-	this.id = id;
-	this.roomid = roomid;
-	this.roomtype = roomtype;
-	this.storey = storey;
-	this.price = price;
-	this.dis = dis;
-	this.vipdis = vipdis;
-	this.svipdis = svipdis;
+public String getRoomstate() {
+	return roomstate;
 }
-public GuestRoom() {
-	super();
-	// TODO Auto-generated constructor stub
+public void setRoomstate(String roomstate) {
+	this.roomstate = roomstate;
 }
 @Override
 public String toString() {
 	return "GuestRoom [id=" + id + ", roomid=" + roomid + ", roomtype=" + roomtype + ", storey=" + storey + ", price="
-			+ price + ", dis=" + dis + ", vipdis=" + vipdis + ", svipids=" + svipdis + "]";
+			+ price + ", dis=" + dis + ", vipdis=" + vipdis + ", svipdis=" + svipdis + ", roomstate=" + roomstate + "]";
 }
+
+
 
 }

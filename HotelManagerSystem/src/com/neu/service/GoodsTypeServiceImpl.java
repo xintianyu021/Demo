@@ -41,6 +41,18 @@ public class GoodsTypeServiceImpl implements GoodsTypeService {
 		return goodstype;
 	}
 
+	@Override
+	public int count() throws Exception {
+		int pages = dao.count();
+		return pages;
+	}
+
+	@Override
+	public List<GoodsType> getList() throws Exception {
+		List<GoodsType> list = dao.getList();
+		return list;
+	}
+
 	
 	
 	

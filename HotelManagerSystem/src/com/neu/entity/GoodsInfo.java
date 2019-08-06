@@ -8,8 +8,7 @@ public class GoodsInfo {
 	private double price;
 	private String unit;
 	private String notes;
-	public GoodsInfo(int id, String goodid, String goodname, GoodsType goodstype, double price, String unit,
-			String notes) {
+	public GoodsInfo(int id, String goodid, String goodname, GoodsType goodstype, double price, String unit,String notes) {
 		super();
 		this.id = id;
 		this.goodid = goodid;

@@ -41,11 +41,11 @@ public class SearchVipServlet extends HttpServlet {
 				
 				//BUG说明：由于查询需求有三种带参方式，因此分页也需带参，但使用前两种方式，下面流程控制前两种条件无法触发
 				
-				if(vipid.length()!=0 && guest.length()==0) {
+				if(vipid != null && (guest==null||guest.equals(""))) {
 					Vip vip = vipservice.getByVipid(vipid);
 					request.setAttribute("vip", vip);
 					request.getRequestDispatcher("vip.jsp").forward(request, response);
-				}else if(vipid.length()==0 && guest.length()!=0) {
+				}else if((vipid==null||vipid.equals("")) && guest!=null) {
 					HttpSession session = request.getSession();
 					session.setAttribute("searchGuest", guest);
 					int count = vipservice.counts(guest);

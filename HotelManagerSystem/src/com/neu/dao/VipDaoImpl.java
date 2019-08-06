@@ -134,6 +134,7 @@ public class VipDaoImpl implements VipDao {
 		if(rs.next()) {
 			count = rs.getInt(1);
 		}
+		db.closeConnection(connection);
 		return count;
 	}
 

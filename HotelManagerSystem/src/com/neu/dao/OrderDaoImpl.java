@@ -47,7 +47,7 @@ public class OrderDaoImpl implements OrderDao {
 
 	@Override
 	public List<Order> getAllByPage(int pageNum, int pageSize) throws Exception {
-		String sql = "select * from order "
+		String sql = "select * from ordernote "
 				+ "limit ?,?";
 		
 		int index = (pageNum-1)*pageSize;
@@ -88,7 +88,7 @@ public class OrderDaoImpl implements OrderDao {
 
 	@Override
 	public List<Order> getByNewstateByPage(String newstate, int pageNum, int pageSize) throws Exception {
-		String sql = "select * from order "
+		String sql = "select * from ordernote "
 				+ "where newstate = ? "
 				+ "limit ?,?";
 		
@@ -130,7 +130,7 @@ public class OrderDaoImpl implements OrderDao {
 
 	@Override
 	public int getPageNumAll() throws Exception {
-		String sql = "select count(*) num from order ";
+		String sql = "select count(*) num from ordernote ";
 		
 		Connection c = u.getConnection();
 		
@@ -145,12 +145,138 @@ public class OrderDaoImpl implements OrderDao {
 
 	@Override
 	public int getPageNumByNewstate(String newstate) throws Exception {
-		String sql = "select count(*) num from order "
+		String sql = "select count(*) num from ordernote "
 				+ "where newstate = ? ";
 		
 		Connection c = u.getConnection();
 		
 		ResultSet r = u.executeQuery(sql, c , newstate);
+		
+		r.next();
+		int n = r.getInt("num");
+		
+		u.closeConnection(c);
+		return n;
+	}
+
+	@Override
+	public List<Order> getByPartsByPage(String idcard, String guest, String roomtype, String roomid, String orderstate,
+			String newstate, int pageNum, int pageSize) throws Exception {
+		String tail = "where ";
+		int flag = 0;
+		if(idcard!=null && !idcard.equals("")) {
+			tail += "idcard='"+idcard+"' and ";
+			flag++;
+		}
+		if(guest!=null && !guest.equals("")) {
+			tail += "guest='"+guest+"' and ";
+			flag++;
+		}
+		if(roomtype!=null && !roomtype.equals("")) {
+			tail += "roomtype='"+roomtype+"' and ";
+			flag++;
+		}
+		if(roomid!=null && !roomid.equals("")) {
+			tail += "roomid='"+roomid+"' and ";
+			flag++;
+		}
+		if(orderstate!=null && !orderstate.equals("")) {
+			tail += "orderstate='"+orderstate+"' and ";
+			flag++;
+		}
+		if(newstate!=null && !newstate.equals("")) {
+			tail += "newstate='"+newstate+"' and ";
+			flag++;
+		}
+		tail += "true ";
+		
+		if(flag == 0) {
+			tail = "";
+		}
+		
+		//System.out.println(tail);
+		
+		String sql = "select * from ordernote "
+				+ tail
+				+ "limit ?,?";
+		
+		int index = (pageNum-1)*pageSize;
+		
+		Connection c = u.getConnection();
+		
+		ResultSet r = u.executeQuery(sql, c , index , pageSize);
+		if(!r.next()) {
+			u.closeConnection(c);
+			return null;
+		}
+		
+		List<Order> list = new ArrayList<>();
+		
+		do {
+			int id = r.getInt("id"); 
+			String orderid = r.getString("orderid");
+			roomid = r.getString("roomid");
+			roomtype = r.getString("roomtype");
+			orderstate = r.getString("orderstate");
+			String optype = r.getString("optype");
+			guest = r.getString("guest");
+			idcard = r.getString("idcard");
+			String vipid = r.getString("vipid");
+			String tel = r.getString("tel");
+			Date time = r.getDate("time");
+			newstate = r.getString("newstate");
+			
+			Order order = new Order(id, orderid, roomid, roomtype, orderstate, optype, guest, idcard, vipid, tel, time, newstate);
+			
+			list.add(order);
+		}
+		while(r.next());
+		
+		u.closeConnection(c);
+		return list;
+	}
+
+	@Override
+	public int countByParts(String idcard, String guest, String roomtype, String roomid, String orderstate,
+			String newstate, int pageNum, int pageSize) throws Exception {
+		String tail = "where ";
+		int flag = 0;
+		if(idcard!=null && !idcard.equals("")) {
+			tail += "idcard="+idcard+" and ";
+			flag++;
+		}
+		if(guest!=null && !guest.equals("")) {
+			tail += "guest="+guest+" and ";
+			flag++;
+		}
+		if(roomtype!=null && !roomtype.equals("")) {
+			tail += "roomtype="+roomtype+" and ";
+			flag++;
+		}
+		if(roomid!=null && !roomid.equals("")) {
+			tail += "roomid="+roomid+" and ";
+			flag++;
+		}
+		if(orderstate!=null && !orderstate.equals("")) {
+			tail += "orderstate="+orderstate+" and ";
+			flag++;
+		}
+		if(newstate!=null && !newstate.equals("")) {
+			tail += "newstate="+newstate+" and ";
+			flag++;
+		}
+		tail += "true";
+		
+		if(flag == 0) {
+			tail = "";
+		}
+		
+		String sql = "select count(*) num from ordernote "
+				+ tail;
+		
+		Connection c = u.getConnection();
+		
+		ResultSet r = u.executeQuery(sql, c);
 		
 		r.next();
 		int n = r.getInt("num");
