@@ -37,7 +37,7 @@
 			</tr>
 			<tr>
 				<td colspan="2">
-					<input type="submit" value="预定"/>
+					<input type="submit" value="入住"/>
 					<input type="reset" value="重置"/>
 				</td>
 				
@@ -48,7 +48,7 @@
 	</form>
 </body>
 
-<script src="js/unicorn.js"></script>
+<script src="js/jquery-3.4.1.js"></script>
 <script type="text/javascript">
 $(function(){
 	if(${ param.msg != null }){

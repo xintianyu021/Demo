@@ -17,6 +17,8 @@ import com.neu.service.CheckInHotelService;
 import com.neu.service.CheckInHotelServiceImpl;
 import com.neu.service.CheckInManageService;
 import com.neu.service.CheckInManageServiceImpl;
+import com.neu.service.RecodeJournalService;
+import com.neu.service.RecodeJournalServiceImpl;
 
 /**
  * Servlet implementation class CheckInManageServlet
@@ -32,7 +34,7 @@ public class CheckInManageServlet extends HttpServlet {
 		request.setCharacterEncoding("utf-8");
 		String method2 = request.getParameter("method");
 		String method = "getAll";
-		if(method!=null) {
+		if(method2!=null) {
 			method = method2;
 		}
 		switch(method) {
@@ -53,6 +55,9 @@ public class CheckInManageServlet extends HttpServlet {
 			break;
 		case "changeRoomDone":
 			changeRoomDone(request, response);
+			break;
+		case "paymentDone":
+			paymentDone(request, response);
 			break;
 		}	
 	}
@@ -76,7 +81,12 @@ public class CheckInManageServlet extends HttpServlet {
 			List<Order> list = checkInManageService.getAllCheckOrder(pageNum, pageSize);
 			request.setAttribute("list", list);
 			int count = checkInManageService.countOfAll();
-			int page = count%pageNum==0?count/pageNum:count/pageNum+1;
+			int page;
+			if(count<5) {
+				page = 1;
+			}else {
+				page = count % pageSize == 0?count/pageSize : count/pageSize + 1;
+			}
 			request.setAttribute("page", page);
 			request.setAttribute("pageNum", pageNum);
 			request.setAttribute("n", 1);
@@ -182,12 +192,25 @@ public class CheckInManageServlet extends HttpServlet {
 		String roomid = request.getParameter("roomid");
 		String newroomid = request.getParameter("newroomid");
 		
+		//System.out.println("changeRoomDone");
+		
 		try {
-			int n2 = checkInManageService.updateNewRoom(roomid);
+			int n2 = checkInManageService.updateNewRoom(newroomid);
+//			System.out.println("checkpoint1");
+			int n3 = checkInManageService.updateOldRoom(roomid);
+//			System.out.println("checkpoint2");
 			int n1 = checkInManageService.updateNewState(idcard, newroomid);
+//			System.out.println("checkpoint3");
 			
+			request.setAttribute("n3", n3);
 			request.setAttribute("n1", n1);
 			request.setAttribute("n2", n2);
+			List<Order> list = checkInManageService.getByRoomId(newroomid);
+			Order order = list.get(0);
+			RecodeJournalService rservice = new RecodeJournalServiceImpl();
+			
+			rservice.RecodeJournal(request, "5", order.getOrderid(), "¶©µ¥", Integer.toString(order.getId()));
+			
 			request.getRequestDispatcher("changeRoomInfo.jsp").forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -210,6 +233,26 @@ public class CheckInManageServlet extends HttpServlet {
 			request.getRequestDispatcher("payment.jsp").forward(request, response);
 		} catch (Exception e) {
 			
+			e.printStackTrace();
+		}
+	}
+	
+	private void paymentDone(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		String idcard = request.getParameter("idcard");
+		String roomid = request.getParameter("roomid");
+		
+		try {
+			List<Order> list = checkInManageService.getByRoomId(roomid);
+			Order order = list.get(0);
+			RecodeJournalService rservice = new RecodeJournalServiceImpl();
+			rservice.RecodeJournal(request, "6", order.getOrderid(), "¶©µ¥", Integer.toString(order.getId()));
+			//rservice.RecodeJournal(request, optype, orderid, notetype, noteline)
+			int n =checkInManageService.payment(idcard, roomid);
+//			System.out.println(n);
+			request.setAttribute("n", n);
+			request.getRequestDispatcher("payment.jsp").forward(request, response);
+			
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

@@ -33,12 +33,12 @@
 			</tr>
 			<tr>
 				<td>新房间类型</td>
-				<td><input readonly name="newtypename" value="${ param.newtypename }"/></td>
+				<td><input readonly name="newtypename" value="${ param.newroomtype }"/></td>
 			</tr>
 			<tr>
 				<td colspan="2">
 					<input type="submit" value="确认"/>
-					<input type="button" value="返回"/>
+					<input type="button" id = "btn1" value="返回"/>
 				</td>
 				
 			</tr>
@@ -47,17 +47,22 @@
 		</fieldset>
 	</form>
 </body>
-<script src="js/unicorn.js"></script>
+<script type="text/javascript" src="js/jquery-3.4.1.js" ></script>
 <script type="text/javascript">
 $(function(){
-	if(${param.n1!=null && param.n2 !=null}){
-		if(${ param.n1==1 && param.n2==1 }){
+	if(${!(empty n1) && !(empty n2)}){
+		if(${ n1==1 && n2==1 }){
 			alert("成功更换房间!");
 		}else{
 			alert("更换房间失败!");
 		}
 		window.close();
 	}
-});
+	$("#btn1").click(function(){
+		window.close();
+	})
+	
+	
+})
 </script>
 </html>

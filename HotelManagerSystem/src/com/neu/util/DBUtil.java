@@ -51,6 +51,9 @@ public class DBUtil {
 			}
 		}
 		int a = ps.executeUpdate();
+		ps.close();
+		closeConnection(c);
+		
 		return a;
 	}
 	

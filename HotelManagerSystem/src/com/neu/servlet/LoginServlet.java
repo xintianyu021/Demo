@@ -33,7 +33,9 @@ public class LoginServlet extends HttpServlet {
 				if(username.equals(sys.getUsername()) &&password.equals(sys.getPassword())) {
 					HttpSession session = request.getSession();
 					session.setAttribute("sysuser", sys);
-					request.getRequestDispatcher("main.html").forward(request, response);
+					session.setAttribute("username", username);
+					session.setAttribute("usertype", sys.getUsertype());
+					request.getRequestDispatcher("main.jsp").forward(request, response);
 				}else {
 					request.setAttribute("error", 0);
 					request.getRequestDispatcher("login.jsp").forward(request, response);

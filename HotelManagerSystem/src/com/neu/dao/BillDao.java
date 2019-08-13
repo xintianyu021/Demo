@@ -14,4 +14,7 @@ public interface BillDao {
 	public int getPageNumByOrderid(String orderid ) throws Exception;
 	public double getSum(String orderid) throws Exception;
 	
+	
+	public List<Bill> getTable(String orderid, String roomid , String idcard , String goodtype , String tel , String starttime , String endtime ,int pageNum , int pageSize) throws Exception;
+	public int countTable(String orderid, String roomid , String idcard , String goodtype , String tel , String starttime , String endtime ,int pageNum , int pageSize) throws Exception;
 }

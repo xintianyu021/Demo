@@ -18,4 +18,5 @@ public interface CheckInManageService {
 	public List<Bill> getBill(String idcard,int pageNum,int pageSize) throws Exception;
 	public int getPageNumByOrderid(String idcard ) throws Exception;
 	public double getSum(String orderid) throws Exception;
+	public int payment(String idcard,String roomid) throws Exception;
 }

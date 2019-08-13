@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neu.mapper.EmpMapper">
+<select id="getAll" resultType="com.neu.entity.Emp">
+	select * from emp order by empno
+</select>
+
+<select id="getById" resultType="com.neu.entity.Emp">
+	select * from emp where empno = #{empno}
+</select>
+
+<insert id="insert">
+	insert into emp values(#{empno},#{ename},#{job},#{mgr},#{hiredate},#{sal},#{comm},#{dept.deptno})
+</insert>
+
+<update id="update">
+	update emp set ename = #{ename},job = #{job},mgr = #{mgr},hiredate = #{hiredate},sal = #{sal},comm = #{comm},
+		deptno = #{dept.deptno} where empno = #{empno}
+	
+</update>
+
+<delete id="delete">
+	delete from emp where empno = #{empno}
+</delete>
+
+<select id="getByName" resultType="com.neu.entity.Emp">
+	select * from emp where ename = #{ename} and job = #{job}
+</select>
+
+<select id="getByName2" resultType="com.neu.entity.Emp">
+	select * from emp where ename = #{ename} and job = #{job}
+</select>
+
+<select id="getAllBySort" resultType="com.neu.entity.Emp">
+	select * from emp order by ${value}
+</select>
+
+<select id="find" resultType="com.neu.entity.Emp">
+	select * from emp
+	<where>
+		<if test="empno!=null">
+			and empno = #{empno}
+		</if>
+		<if test="ename!=null">
+			and ename = #{ename}
+		</if>
+		<if test="job!=null">
+			and job = #{job}
+		</if>
+		<if test="mgr!=null">
+			and mgr = #{mgr}
+		</if>
+		<if test="hiredate!=null">
+			and hiredate = #{hiredate}
+		</if>
+		<if test="sal!=null">
+			and sal = #{sal}
+		</if>
+		<if test="comm!=null">
+			and comm = #{comm}
+		</if>
+		<if test="dept!=null">
+			and deptno = #{dept.deptno}
+		</if>
+	</where>
+</select>
+
+
+</mapper>

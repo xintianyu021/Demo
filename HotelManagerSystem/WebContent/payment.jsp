@@ -33,19 +33,19 @@
 		</script>
 	</head>	
 	<body>
-		<div id="header"><h1>酒店管理系统</h1></div>
+		<div id="header" ><h1></h1></div>
 		<div id="user-nav" class="navbar navbar-inverse">
             <ul class="nav btn-group">
                 <li class="btn btn-inverse">
-                    <a href="SysuserGradeServlet">
+                    <a href="#">
                         <i class="icon icon-user"></i>
                         <span class="text">
-                           	${ sessionScope.sysuser.username }
+                            ${ sessionScope.username==null?"testtext":sessionScope.username }
                         </span>
                     </a>
                 </li>
                 <li class="btn btn-inverse">
-                    <a href="LogoutServlet">
+                    <a href="${ pageContext.request.contextPath }/LogoutServlet">
                         <i class="icon icon-share-alt"></i>
                         <span class="text">注销</span>
                     </a>
@@ -55,74 +55,106 @@
         <div id="sidebar">
             <ul>
                 <li>
-                    <a href="main.html">
+                    <a href="main.jsp">
                         <i class="icon icon-home"></i> 
                         <span>首页</span>
                     </a>
                 </li>
-                <li class="submenu">
+                <c:if test="${ sessionScope.usertype=='超级管理员' || sessionScope.usertype==null }">
+                <li class="submenu" >
                     <a href="#">
-                        <i class="icon icon-time"></i> 
+                        <i class="icon icon-tag"></i> 
                         <span>基础信息管理</span>
                     </a>
-                     <ul>
-                        <li><a href="#">客房类型管理</a></li>
-                        <li><a href="#">楼层管理</a></li>
-                        <li><a href="#">商品类型管理</a></li>
-                        <li><a href="#">商品管理</a></li>
-                        <li><a href="#">会员管理</a></li>
-                    
+                    <ul>
+                        <li><a href="${ pageContext.request.contextPath }/RoomTypeServlet">客房类型管理</a></li>
+                        <li><a href="${ pageContext.request.contextPath }/StoreyServlet">楼层管理</a></li>
+                        <li><a href="${ pageContext.request.contextPath }/GoodsTypeServlet">商品类别管理</a></li>
+                        <li><a href="${ pageContext.request.contextPath }/GoodsInfoServlet">商品管理</a></li>
+                        <li><a href="${ pageContext.request.contextPath }/vip.jsp">会员管理</a></li>
                     </ul>
                 </li>
-                <li>
-                    <a href="changePassword.html">
+                </c:if>
+                
+                <c:if test="${ sessionScope.usertype=='超级管理员' || sessionScope.usertype==null }">
+                <li class="submenu">
+                    <a>
                         <i class="icon icon-ok-circle"></i> 
-                        <span>修改登录密码</span>
+                        <span>系统管理</span>
                     </a>
+                    <ul>
+                        <li><a href="${ pageContext.request.contextPath }/OperationServletAll">日志管理</a></li>
+                    </ul>
                 </li>
+                </c:if>
+                <c:if test="${ sessionScope.usertype=='超级管理员' || sessionScope.usertype==null }">
                 <li class="submenu">
                     <a href="#">
-                        <i class="icon icon-user"></i> 
-                        <span>休假管理</span> 
+                        <i class="icon icon-flag"></i> 
+                        <span>客房管理</span> 
                         <!--
                         <span class="label">2</span>
                         -->
                     </a>
-                    
+                    <ul>
+                        <li><a href="${ pageContext.request.contextPath }/GuestRoomServlet1">客房信息管理</a></li>
+                    </ul>
                 </li>
-                <li>
-                    <a href="emplist.html">
+                </c:if>
+                <c:if test="${ sessionScope.usertype=='超级管理员' || sessionScope.usertype=='经理' || sessionScope.usertype==null }">
+                <li class="submenu">
+                    <a href="#">
+                        <i class="icon icon-time"></i> 
+                        <span>报表管理</span> 
+                        <!--
+                        <span class="label">2</span>
+                        -->
+                    </a>
+                    <ul>
+                        <li><a href="${ pageContext.request.contextPath }/TableReserveServlet">预定客人报表</a></li>
+                        <li><a href="${ pageContext.request.contextPath }/TableHereServlet">在住客人报表</a></li>
+                        <li><a href="${ pageContext.request.contextPath }/TableLeaveServlet">离店客人报表</a></li>
+                        <li><a href="${ pageContext.request.contextPath }/TableBillServlet">财务进账报表</a></li>
+                    </ul>
+                </li>
+                </c:if>
+                <c:if test="${ sessionScope.usertype=='超级管理员' || sessionScope.usertype=='前台' || sessionScope.usertype==null }">
+                <li class="submenu">
+                    <a href="#">
                         <i class="icon icon-user"></i> 
-                        <span>员工信息管理</span> 
+                        <span>客人管理</span> 
                     </a>
+                    <ul>
+                        <li><a href="${ pageContext.request.contextPath }/CheckInHotelServlet">入住及预订</a></li>
+                        <li><a href="${ pageContext.request.contextPath }/ReserveServlet">预定信息和操作</a></li>
+                        <li class="active"><a href="${ pageContext.request.contextPath }/CheckInManageServlet">入住信息和操作</a></li>
+                    </ul>
                 </li>
+                </c:if>
+                <c:if test="${ sessionScope.usertype=='超级管理员' || sessionScope.usertype=='前台' || sessionScope.usertype==null }">
                 <li>
-                    <a href="deptlist.html">
-                        <i class="icon icon-flag"></i> 
-                        <span>部门信息管理</span> 
+                    <a href="${ pageContext.request.contextPath }/BillServlet">
+                        <i class="icon icon-briefcase"></i> 
+                        <span>消费管理</span> 
                     </a>
                 </li>
-                <!--<li class="active">
-                    <a href="joblist.html">
-                        <i class="icon icon-briefcase"></i> 
-                        <span>职位信息管理</span> 
-                    </a>
-                </li>-->
+                </c:if>
             </ul>
         </div>
         
 		<div id="content">
 			<div id="content-header">
-				<h1>预订及入住</h1>
+				<h1>账单</h1>
 			</div>
 			<div id="breadcrumb">
 				<a href="main.html" class="tip-bottom">
                 	<i class="icon-home"></i>
                                                     首页
                 </a>
-				<a href="#" class="current">VIP会员管理</a>
+                <a href="#">客人管理</a>
+				<a href="#" class="current">入住信息和操作</a>
 			</div>
-			<form action="${ pageContext.request.contextPath }/CheckInManageServlet?pageNum=1&method=getEmptyRoom" method="post" name="searchForm">
+			<form action="${ pageContext.request.contextPath }/CheckInManageServlet?pageNum=1&method=paymentDone" method="post" name="searchForm">
 				<input type="hidden" name="pagenum" id="pagenum"/>
 				<div class="container-fluid">
 					<div class="row-fluid">
@@ -135,10 +167,10 @@
 								身份证号：<input id="idcard" class="vipinput" name="idcard" type="text" value="${ order.idcard }" readonly style="width:65%"/>
 							</span>
 							<span class="span3">
-								房间号：<input id="roomid" class="vipinput" name="guest" type="text" value="${ order.roomid }" readonly style="width:65%"/>
+								房间号：<input id="roomid" class="vipinput" name="roomid" type="text" value="${ order.roomid }" readonly style="width:65%"/>
 							</span>
 							<span class="span3">
-								房间类型：<input id="typename" class="vipinput" name="guest" type="text" value="${ order.roomtype.typename }" readonly style="width:65%"/>
+								房间类型：<input id="typename" class="vipinput" name="roomtype" type="text" value="${ order.roomtype }" readonly style="width:65%"/>
 							</span><br>
 							<span class="span3">
 								总金额：<input id="sum" class="vipinput" name="sum" type="text" value="${ sum }" readonly style="width:65%"/>
@@ -181,7 +213,7 @@
 										 <td>${ bill.num }</td>
 										 <td>${ bill.total }</td>
 										 <td>${ bill.tel }</td>
-										 <td>${ bill.date }</td>
+										 <td>${ bill.time }</td>
 										
 										 <!-- <td>
 	                                          <button class="btn btn-info" onclick="ChangeRoom(this)">
@@ -284,8 +316,18 @@
         <div class="row-fluid">&nbsp;</div>
         <div class="row-fluid">
             <div id="footer" class="span12">
-                2016 &copy; 酒店管理系统
+                2019 &copy; 酒店管理系统
             </div>
         </div>
 </body>
+<script src="js/jquery-3.4.1.js"></script>
+	<script type="text/javascript">
+	     $(function(){
+	     	if(${ n!=0&&n!=null }){
+	     		alert("结账退房成功！");
+	     		window.close();
+	     	}
+	     });
+	   
+	 </script>
 </html>

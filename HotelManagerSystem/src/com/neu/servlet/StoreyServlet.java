@@ -23,7 +23,12 @@ public class StoreyServlet extends HttpServlet {
    
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
-		String method = request.getParameter("method");
+		String method1 = request.getParameter("method");
+		String method = "getAll";
+		if(method1 != null && method1!="" ) {
+			method = method1;
+		}
+		
 		
 		if("getAll".equals(method)) {
 			try {
@@ -129,15 +134,23 @@ public class StoreyServlet extends HttpServlet {
 			int pageSize = 3;
 			String num = request.getParameter("pageNum");
 			
-			List<Storey> list = stoService.getStorey(pageSize, pageNum);
-			request.setAttribute("sto", list);
-			
 			if(num != null) {
 				pageNum = Integer.parseInt(num);
 			}
 			
+			/*System.out.println(num);
+			System.out.println(pageNum);*/
+			
+			List<Storey> list = stoService.getStorey(pageSize, pageNum);
+			request.setAttribute("sto", list);
+			
+			
+			
 			int count = stoService.number();
 			int page = count % pageSize == 0?count / pageSize:count / pageSize+1;
+			
+			/*System.out.println(count);
+			System.out.println(page);*/
 			
 			request.setAttribute("page", page);
 			request.setAttribute("pageNum", pageNum);

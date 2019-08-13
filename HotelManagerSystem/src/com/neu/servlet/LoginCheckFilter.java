@@ -30,22 +30,23 @@ public class LoginCheckFilter implements Filter {
 
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-//		HttpServletRequest request2 = (HttpServletRequest) request;
-//		
-//		String uri = request2.getRequestURI();
-//		if(uri.equals(request2.getContextPath()+"/login.jsp") || uri.equals(request2.getContextPath()+"/LoginServlet")) {
-//			chain.doFilter(request, response);
-//			return;
-//		}
-//		
-//		HttpSession session = request2.getSession();
-//		Sysuser sys = (Sysuser) session.getAttribute("sysuser");
-//		
-//		if(sys==null) {
-//			((HttpServletResponse)response).sendRedirect(request2.getContextPath()+"/login.jsp");
-//			return;
-//		}
-//		
+		HttpServletRequest request2 = (HttpServletRequest) request;
+		request.setCharacterEncoding("utf-8");
+		
+		String uri = request2.getRequestURI();
+		if(uri.equals(request2.getContextPath()+"/login.jsp") || uri.equals(request2.getContextPath()+"/LoginServlet")) {
+			chain.doFilter(request, response);
+			return;
+		}
+		
+		HttpSession session = request2.getSession();
+		Sysuser sys = (Sysuser) session.getAttribute("sysuser");
+		
+		if(sys==null) {
+			((HttpServletResponse)response).sendRedirect(request2.getContextPath()+"/login.jsp");
+			return;
+		}
+		
 		chain.doFilter(request, response);
 	}
 

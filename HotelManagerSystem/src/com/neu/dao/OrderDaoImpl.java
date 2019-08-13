@@ -2,6 +2,7 @@ package com.neu.dao;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -242,30 +243,30 @@ public class OrderDaoImpl implements OrderDao {
 		String tail = "where ";
 		int flag = 0;
 		if(idcard!=null && !idcard.equals("")) {
-			tail += "idcard="+idcard+" and ";
+			tail += "idcard='"+idcard+"' and ";
 			flag++;
 		}
 		if(guest!=null && !guest.equals("")) {
-			tail += "guest="+guest+" and ";
+			tail += "guest='"+guest+"' and ";
 			flag++;
 		}
 		if(roomtype!=null && !roomtype.equals("")) {
-			tail += "roomtype="+roomtype+" and ";
+			tail += "roomtype='"+roomtype+"' and ";
 			flag++;
 		}
 		if(roomid!=null && !roomid.equals("")) {
-			tail += "roomid="+roomid+" and ";
+			tail += "roomid='"+roomid+"' and ";
 			flag++;
 		}
 		if(orderstate!=null && !orderstate.equals("")) {
-			tail += "orderstate="+orderstate+" and ";
+			tail += "orderstate='"+orderstate+"' and ";
 			flag++;
 		}
 		if(newstate!=null && !newstate.equals("")) {
-			tail += "newstate="+newstate+" and ";
+			tail += "newstate='"+newstate+"' and ";
 			flag++;
 		}
-		tail += "true";
+		tail += "true ";
 		
 		if(flag == 0) {
 			tail = "";
@@ -276,8 +277,181 @@ public class OrderDaoImpl implements OrderDao {
 		
 		Connection c = u.getConnection();
 		
-		ResultSet r = u.executeQuery(sql, c);
+		ResultSet r = u.executeQuery(sql, c );
 		
+		r.next();
+		int n = r.getInt("num");
+		
+		u.closeConnection(c);
+		return n;
+	}
+
+	@Override
+	public List<Order> getByPartsAndTimeByPage(String optype,String idcard, String guest, String roomtype, String roomid,
+			String orderstate, String newstate, String starttime, String endtime, int pageNum, int pageSize)
+			throws Exception {
+		String tail = "where ";
+		if(optype!=null && !optype.equals("")) {
+			tail += "optype='"+optype+"' and ";
+		}
+		if(idcard!=null && !idcard.equals("")) {
+			tail += "idcard='"+idcard+"' and ";
+		}
+		if(guest!=null && !guest.equals("")) {
+			tail += "guest='"+guest+"' and ";
+		}
+		if(roomtype!=null && !roomtype.equals("")) {
+			tail += "roomtype='"+roomtype+"' and ";
+		}
+		if(roomid!=null && !roomid.equals("")) {
+			tail += "roomid='"+roomid+"' and ";
+		}
+		if(orderstate!=null && !orderstate.equals("")) {
+			tail += "orderstate='"+orderstate+"' and ";
+		}
+		if(newstate!=null && !newstate.equals("")) {
+			tail += "newstate='"+newstate+"' and ";
+		}
+		
+		SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		int flag = 0;
+		Date ctime = new Date();
+		Date start = new Date();
+		Date end = new Date();
+		if(starttime!=null && !starttime.equals("")) {
+			starttime += " 00:00:00";
+			start = s.parse(starttime);
+			ctime = start;
+			tail += "time >= ? and ";
+			flag++;
+		}
+		
+		if(endtime!=null && !endtime.equals("")){
+			endtime += " 23:59:59";
+			end = s.parse(endtime);
+			ctime = end;
+			tail += "time <= ? and ";
+			flag++;
+		}
+		
+		tail += "true ";
+		
+		//System.out.println(tail);
+		
+		String sql = "select * from ordernote "
+				+ tail
+				+ "limit ?,?";
+		
+		int index = (pageNum-1)*pageSize;
+		
+		ResultSet r;
+		
+		Connection c = u.getConnection();
+		if(flag == 0) {
+			r = u.executeQuery(sql, c , index , pageSize);
+		}
+		else if(flag == 1){
+			r = u.executeQuery(sql, c , ctime , index , pageSize);
+		}
+		else {
+			r = u.executeQuery(sql, c , start , end , index , pageSize);
+		}
+		
+		if(!r.next()) {
+			u.closeConnection(c);
+			return null;
+		}
+		
+		List<Order> list = new ArrayList<>();
+		
+		do {
+			int id = r.getInt("id"); 
+			String orderid = r.getString("orderid");
+			roomid = r.getString("roomid");
+			roomtype = r.getString("roomtype");
+			orderstate = r.getString("orderstate");
+			optype = r.getString("optype");
+			guest = r.getString("guest");
+			idcard = r.getString("idcard");
+			String vipid = r.getString("vipid");
+			String tel = r.getString("tel");
+			Date time = r.getDate("time");
+			newstate = r.getString("newstate");
+			
+			Order order = new Order(id, orderid, roomid, roomtype, orderstate, optype, guest, idcard, vipid, tel, time, newstate);
+			
+			list.add(order);
+		}
+		while(r.next());
+		
+		u.closeConnection(c);
+		return list;
+	}
+
+	@Override
+	public int countByPartsAndTime(String optype,String idcard, String guest, String roomtype, String roomid, String orderstate,
+			String newstate, String starttime, String endtime, int pageNum, int pageSize) throws Exception {
+		String tail = "where ";
+		if(optype!=null && !optype.equals("")) {
+			tail += "optype='"+optype+"' and ";
+		}
+		if(idcard!=null && !idcard.equals("")) {
+			tail += "idcard='"+idcard+"' and ";
+		}
+		if(guest!=null && !guest.equals("")) {
+			tail += "guest='"+guest+"' and ";
+		}
+		if(roomtype!=null && !roomtype.equals("")) {
+			tail += "roomtype='"+roomtype+"' and ";
+		}
+		if(roomid!=null && !roomid.equals("")) {
+			tail += "roomid='"+roomid+"' and ";
+		}
+		if(orderstate!=null && !orderstate.equals("")) {
+			tail += "orderstate='"+orderstate+"' and ";
+		}
+		if(newstate!=null && !newstate.equals("")) {
+			tail += "newstate='"+newstate+"' and ";
+		}
+		
+		SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		int flag = 0;
+		Date ctime = new Date();
+		Date start = new Date();
+		Date end = new Date();
+		if(starttime!=null && !starttime.equals("")) {
+			starttime += " 00:00:00";
+			start = s.parse(starttime);
+			ctime = start;
+			tail += "time >= ? and ";
+			flag++;
+		}
+		
+		if(endtime!=null && !endtime.equals("")){
+			endtime += " 23:59:59";
+			end = s.parse(endtime);
+			ctime = end;
+			tail += "time <= ? and ";
+			flag++;
+		}
+		
+		tail += "true ";
+		
+		String sql = "select count(*) num from ordernote "
+				+ tail;
+		
+		ResultSet r;
+		
+		Connection c = u.getConnection();
+		if(flag == 0) {
+			r = u.executeQuery(sql, c );
+		}
+		else if(flag == 1){
+			r = u.executeQuery(sql, c , ctime );
+		}
+		else {
+			r = u.executeQuery(sql, c , start , end );
+		}
 		r.next();
 		int n = r.getInt("num");
 		

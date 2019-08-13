@@ -1,7 +1,6 @@
 package com.neu.servlet;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -15,13 +14,12 @@ import com.neu.dao.GuestRoomDao;
 import com.neu.dao.GuestRoomDaoImpl;
 import com.neu.dao.OrderDao;
 import com.neu.dao.OrderDaoImpl;
-import com.neu.dao.OrderNumberDao;
-import com.neu.dao.OrderNumberDaoImpl;
 import com.neu.entity.GuestRoom;
 import com.neu.entity.Order;
-import com.neu.entity.OrderNumber;
 import com.neu.service.OrderNumberService;
 import com.neu.service.OrderNumberServiceImpl;
+import com.neu.service.RecodeJournalService;
+import com.neu.service.RecodeJournalServiceImpl;
 
 /**
  * Servlet implementation class MoveInServlet
@@ -30,6 +28,7 @@ import com.neu.service.OrderNumberServiceImpl;
 public class MoveInServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
+	RecodeJournalService recodeJourService = new RecodeJournalServiceImpl();
 	OrderDao orderDao = new OrderDaoImpl();
 	OrderNumberService orderNumberService = new OrderNumberServiceImpl();
 	
@@ -122,6 +121,12 @@ public class MoveInServlet extends HttpServlet {
 		
 		int n = orderDao.insert(order);
 		
+
+		List<Order> orderList2 = orderDao.getByPartsByPage(null, null, null, roomid, null, "true", 1, 1);
+		order = orderList2.get(0);
+		String noteline = Integer.toString(order.getId());
+		
+		int nre = recodeJourService.RecodeJournal(request, "1", orderid, "订单", noteline);
 		
 		
 		response.sendRedirect(request.getContextPath()+"/reserveinfo.jsp?msg="+msg);
@@ -139,17 +144,17 @@ public class MoveInServlet extends HttpServlet {
 		
 		Date time = new Date();
 		
-		List<Order> checkR = orderDao.getByPartsByPage(idcard, null, null, null, "预约", "true", 1, 1);
+		List<Order> checkR = orderDao.getByPartsByPage(idcard, null, null, null, "预定", "true", 1, 1);
 		List<Order> checkC = orderDao.getByPartsByPage(idcard, null, null, null, "入住", "true", 1, 1);
 		
 		if(checkR != null) {
 			String msg = "reserved";
-			response.sendRedirect(request.getContextPath()+"/reserveinfo.jsp?msg="+msg);
+			response.sendRedirect(request.getContextPath()+"/checkin.jsp?msg="+msg);
 			return;
 		}
 		else if(checkC != null) {
 			String msg = "checked";
-			response.sendRedirect(request.getContextPath()+"/reserveinfo.jsp?msg="+msg);
+			response.sendRedirect(request.getContextPath()+"/checkin.jsp?msg="+msg);
 			return;
 		}
 		
@@ -161,7 +166,7 @@ public class MoveInServlet extends HttpServlet {
 		
 		int roomid1 = Integer.parseInt(roomid);
 		
-		GuestRoom guestRoom = guestRoomDao.getById(roomid1, 0, 1);
+		GuestRoom guestRoom = guestRoomDao.getById(roomid1, 1, 1);
 		guestRoom.setRoomstate("已入住");
 		
 		int m = guestRoomDao.update(guestRoom);
@@ -170,7 +175,11 @@ public class MoveInServlet extends HttpServlet {
 		
 		int n = orderDao.insert(order);
 		
+		List<Order> orderList2 = orderDao.getByPartsByPage(null, null, null, roomid, null, "true", 1, 1);
+		order = orderList2.get(0);
+		String noteline = Integer.toString(order.getId());
 		
+		int nre = recodeJourService.RecodeJournal(request, "4", orderid, "订单", noteline);
 		
 		response.sendRedirect(request.getContextPath()+"/checkin.jsp?msg="+msg);
 	}
